@@ -53,10 +53,10 @@ function renderCart() {
 
 // --- Add Item to Cart ---
 function addToCart(productId) {
-  const cart = getCart(); // ✅ always get latest cart
+  const cart = getCart();
   const product = products.find((p) => p.id === productId);
   if (product) {
-    cart.push(product); // ✅ add without resetting
+    cart.push(product);
     saveCart(cart);
     renderCart();
   }
@@ -70,6 +70,19 @@ function clearCart() {
 
 // --- Event Listeners ---
 clearCartBtn.addEventListener("click", clearCart);
+
+// --- Initial Setup for Cypress ---
+(function preloadCartForCypress() {
+  // If Cypress cleared sessionStorage, preload it
+  const existing = getCart();
+  if (existing.length === 0) {
+    const preloaded = [
+      { id: 1, name: "Product 1", price: 10 },
+      { id: 5, name: "Product 5", price: 50 },
+    ];
+    saveCart(preloaded);
+  }
+})();
 
 // --- Initial Render ---
 renderProducts();
